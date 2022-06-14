@@ -18,7 +18,7 @@ def url_format(u):
     print('# Reading url input')
     time.sleep(1)
     ap = u[::-1]
-    count_u = -1w
+    count_u = -1
     for c in ap:
         count_u += 1
         if c == '/':
