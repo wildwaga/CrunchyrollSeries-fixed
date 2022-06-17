@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import cfscrape
 import time
+import os
 
 urls = []
 names = []
@@ -10,6 +11,11 @@ lang = []
 
 # Gets Crunchyroll URL from user.
 print('Welcome to Crunchyroll Batch file creation tool v1.0')
+custom_yt_dl_path = input('Do You Want to Use a Custom youtube-dl Path Y/N: ')
+if custom_yt_dl_path == 'y' or custom_yt_dl_path == 'Y':
+    yt_dl_path = input('Enter Custom youtube-dl Path / the Command You Run to Use youtube-dl: ')
+else:
+    yt_dl_path = 'youtube-dl'
 url_i = input('Enter Crunchyroll Series Url: ')
 
 
@@ -62,7 +68,6 @@ f = open(file_name_i + '.txt', 'w')
 els = soup.find_all('a', class_='portrait-element block-link titlefix episode')
 f.write(str(els))
 f.close()
-print('# File will save in working directory as ' + file_name_i + '.txt')
 print('# Parsing html for links')
 time.sleep(1)
 
@@ -162,20 +167,21 @@ def create_batch():
         lang = urls_fr.copy()
     if lang_choice == 7:
         lang = urls_ger.copy()
-
+    custom_options = input('Use Custom youtube-dl Options Y/N: ')
+    if custom_options == 'y' or custom_options == 'Y':
+        print_options = input('Print youtube-dl Options Y/N: ')
+        if print_options == 'y' or print_options == 'Y':
+            os.system('youtube-dl -h')
+        options = input('Input youtube-dl Options: ')
+    else:
+        options = ''
     # Final print of urls and write with a \n.
-    x = open(file_name_i + '.txt', 'w')
+    x = open('temp.txt', 'w')
     for u in lang:
         x.write(u + '\n')
     x.close()
-
-
+    os.system(yt_dl_path + ' ' + options + ' -a temp.txt')
+    os.remove('temp.txt')
 create_batch()
-
-print_true = input('Print Output Y/N:')
-if print_true == 'y' or print_true == 'Y':
-    for line_z in lang:
-        print(line_z)
-else:
-    print('# Exiting')
-    exit(0)
+print('# Exiting')
+exit(0)
